@@ -61,14 +61,14 @@ public class HomeController implements Initializable {
                 sortBtn.setText("Sort (desc)");
             } else {
                 // TODO sort observableMovies descending
-                observableMovies.sort(Comparator.comparing(Movie::getTitle));
+                observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
                 sortBtn.setText("Sort (asc)");
             }
         });
 
 
         searchBtn.setOnAction(actionEvent -> {
-            String query = searchField.getText().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
+            String query = searchField.getText().trim().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
             Genre selectedGenre = (Genre) genreComboBox.getValue();
 
             List<Movie> filteredMovies = (List<Movie>) allMovies.stream().
@@ -76,8 +76,7 @@ public class HomeController implements Initializable {
                             contains(query)).filter(movie -> selectedGenre == null || movie.getGenres().
                             contains(selectedGenre)).toList();
 
-            observableMovies.addAll(filteredMovies);
-
+            observableMovies.setAll(filteredMovies); //Liste ersetzt anstatt neue Elemente hinzugefügt
         });
 
     }
