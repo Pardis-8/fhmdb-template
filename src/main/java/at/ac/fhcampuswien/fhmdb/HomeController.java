@@ -66,6 +66,7 @@ public class HomeController implements Initializable {
             }
         });
 
+
         searchBtn.setOnAction(actionEvent -> {
             String query = searchField.getText().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
             Genre selectedGenre = (Genre) genreComboBox.getValue();
