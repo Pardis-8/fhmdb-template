@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -39,7 +40,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+        observableMovies.addAll(allMovies); // add dummy data to observable list
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -55,7 +56,7 @@ public class HomeController implements Initializable {
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
+            if (sortBtn.getText().equals("Sort (asc)")) {
                 observableMovies.sort(Comparator.comparing(Movie::getTitle));
                 // TODO sort observableMovies ascending
                 sortBtn.setText("Sort (desc)");
@@ -66,8 +67,16 @@ public class HomeController implements Initializable {
             }
         });
 
+        searchBtn.setOnAction(actionEvent -> applyFilter());//Suchfunktion
 
-        searchBtn.setOnAction(actionEvent -> {
+        searchField.setOnKeyPressed(event -> { //ENTER - Taste
+            if (event.getCode() == KeyCode.ENTER) {
+                applyFilter();
+            }
+        });
+    }
+
+        private void applyFilter() {
             String query = searchField.getText().trim().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
             Genre selectedGenre = (Genre) genreComboBox.getValue();
 
@@ -77,7 +86,6 @@ public class HomeController implements Initializable {
                             contains(selectedGenre)).toList();
 
             observableMovies.setAll(filteredMovies); //Liste ersetzt anstatt neue Elemente hinzugefügt
-        });
-
+        }
     }
-}
+
