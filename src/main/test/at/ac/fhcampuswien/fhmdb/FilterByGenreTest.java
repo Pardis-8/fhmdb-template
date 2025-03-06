@@ -33,7 +33,7 @@ public class FilterByGenreTest {
     }
 
     @Test
-    void empty_list_when_movies_match_no_genre_returned() {
+    void return_empty_list_when_movies_match_no_genre() {
 
         movies = new ArrayList<>();
 
@@ -64,7 +64,7 @@ public class FilterByGenreTest {
     }
 
     @Test
-    void all_matching_movie_genre_included_by_filter() {
+    void all_matching_movie_genres_included_by_filter() {
 
         Movie TheGodfather = new Movie("The Godfather", "The aging patriarch of an organized crime dynasty transfers control of his " +
                         "clandestine empire to his reluctant son.", List.of(Genre.CRIME));
