@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SearchByGenreTest {
+public class FilterByGenreTest {
 
     private List<Movie> movies;
 
@@ -21,8 +21,8 @@ public class SearchByGenreTest {
         movies = new ArrayList<>();
 
         movies.add(new Movie("The Godfather", "...", List.of(Genre.CRIME)));
-        movies.add(new Movie("Fight Club", "...", List.of(Genre.DRAMA, Genre.ACTION));
-        movies.add( new Movie("The Matrix", "...", List.of(Genre.SCIENCE_FICTION, Genre.ACTION));
+        movies.add(new Movie("Fight Club", "...", List.of(Genre.DRAMA, Genre.ACTION)));
+        movies.add( new Movie("The Matrix", "...", List.of(Genre.SCIENCE_FICTION, Genre.ACTION)));
 
     }
 
@@ -37,13 +37,13 @@ public class SearchByGenreTest {
 
         movies = new ArrayList<>();
 
-        movies.add(new Movie("The Godfather", "...", List.of(Genre.CRIME)),
-        movies.add(new Movie("Fight Club", "...", List.of(Genre.DRAMA, Genre.ACTION)),
-        movies.add( new Movie("The Matrix", "...", List.of(Genre.SCIENCE_FICTION, Genre.ACTION))),
+        movies.add(new Movie("The Godfather", "...", List.of(Genre.CRIME)));
+        movies.add(new Movie("Fight Club", "...", List.of(Genre.DRAMA, Genre.ACTION)));
+        movies.add( new Movie("The Matrix", "...", List.of(Genre.SCIENCE_FICTION, Genre.ACTION)));
 
 
-        List<Movie> actual = MovieDisplayHelper.filterMoviesByGenre(movies, Genre.DRAMA);
-        assertTrue(actualMovies.isEmpty(), "Genre not included in the movie list needs to return an emptly list.");
+        List<Movie>actual = MovieDisplayHelper.filterMoviesByGenre(movies, Genre.DRAMA);
+        assertTrue(actual.isEmpty(), "Genre not included in the movie list needs to return an emptly list.");
 
     }
     @Test
@@ -60,7 +60,7 @@ public class SearchByGenreTest {
 
         List<Movie> actual = MovieDisplayHelper.filterMoviesByGenre(movies, Genre.SCIENCE_FICTION);
         assertEquals(1, actual.size(), "Filtered list needs to contain only one movie");
-        assertFalse(actual.contains(new Movie("The Godfather", "...", List.of(Genre.CRIME));
+        assertFalse(actual.contains(new Movie("The Godfather", "...", List.of(Genre.CRIME))));
     }
 
     @Test

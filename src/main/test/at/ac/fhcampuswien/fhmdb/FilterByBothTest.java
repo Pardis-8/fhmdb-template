@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SearchByBothTest {
+public class FilterByBothTest {
 
     private List<Movie> movies;
 
