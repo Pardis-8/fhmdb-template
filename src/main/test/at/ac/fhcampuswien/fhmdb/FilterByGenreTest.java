@@ -47,7 +47,7 @@ public class FilterByGenreTest {
 
     }
     @Test
-    void exclusion_of_non_matching_movies_by_filter() {
+    void exclusion_of_movies_that_dont_match_selected_genre() {
 
         List<Movie> movies = List.of(
 
@@ -64,7 +64,7 @@ public class FilterByGenreTest {
     }
 
     @Test
-    void all_matching_movies_included_by_filter() {
+    void all_matching_movie_genre_included_by_filter() {
 
         Movie TheGodfather = new Movie("The Godfather", "The aging patriarch of an organized crime dynasty transfers control of his " +
                         "clandestine empire to his reluctant son.", List.of(Genre.CRIME));

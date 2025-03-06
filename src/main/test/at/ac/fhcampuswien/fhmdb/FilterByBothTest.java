@@ -27,46 +27,46 @@ public class FilterByBothTest {
     }
 
     @Test
-    void search_null_and_genre_null_returns_unmodified_list() {
-        List<Movie> in_real = MovieDisplayHelper.filterMovies(movies, null, null);
-        assertEquals(movies, in_real, "Null search title and null genre need to be returned to unmodified list.");
+    void return_all_movies_when_search_and_genre_are_null() {
+        List<Movie> actual = MovieDisplayHelper.filterMovies(movies, null, null);
+        assertEquals(movies, actual, "Are both search and genre null must the full unmodified list be returned.");
     }
     @Test
-    void search_null_and_genre_valid_filters_by_genre() {
-        List<Movie> in_real = MovieDisplayHelper.filterMovies(movies, null, Genre.ACTION);
+    void filter_by_genre_when_search_and_genre_are_null() {
+        List<Movie> actual = MovieDisplayHelper.filterMovies(movies, null, Genre.ACTION);
         List<Movie> expected = MovieDisplayHelper.filterMovies(movies, null, Genre.ACTION);
-        assertEquals(expected, in_real, "Only Action movies need to be returned.");
+        assertEquals(expected, actual, "Only Action movies need to be returned.");
 
     }
     @Test
     void search_valid_and_genre_null_filters_by_search() {
-        List<Movie> in_real = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ACTION);
+        List<Movie> actual = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ACTION);
         List<Movie> expected = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ACTION);
-        assertEquals(expected, in_real, "Only movies with 'Fight' in Title or description need to be returned.");
+        assertEquals(expected, actual, "Only movies with 'Fight' in Title or description need to be returned.");
     }
     @Test
     void search_valid_and_genre_valid_filters_by_genre_and_search() {
-        List<Movie> in_real = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ACTION);
-        String in_realTitle = in_real.get(0).getTitle();
+        List<Movie> actual = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ACTION);
+        String actualTitle = actual.get(0).getTitle();
         String expectedTitle = "Fight Club";
 
-        assertEquals(expectedTitle, in_realTitle, "Only title contains 'Fight Club'");
+        assertEquals(expectedTitle, actualTitle, "Only title contains 'Fight Club'");
     }
 
     @Test
     void searched_title_matches_but_incorrect_genre_and_returns_empty_list() {
-        List<Movie> in_real = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ANIMATION);
-        assertTrue(in_real.isEmpty(), "Non matching search title returned.");
+        List<Movie> actual = MovieDisplayHelper.filterMovies(movies, "Fight", Genre.ANIMATION);
+        assertTrue(actual.isEmpty(), "Non matching search title returned.");
 
     }
 
     @Test
     void both_filters_match_subset_of_movies_returned() {
-        List<Movie> in_real = MovieDisplayHelper.filterMovies(movies, "an", Genre.ACTION);
-        List<String> in_realTitle = in_real.stream().map(Movie::getTitle).toList();
+        List<Movie> actual = MovieDisplayHelper.filterMovies(movies, "an", Genre.ACTION);
+        List<String> actualTitle = actual.stream().map(Movie::getTitle).toList();
         List<String> expectedTitle = List.of("The Matrix", "The Godfather.");
 
-        assertEquals(expectedTitle, in_realTitle, "Only The Matrix and The Godfather need to be returned because both match 'an'.");
+        assertEquals(expectedTitle,actualTitle, "Only The Matrix and The Godfather need to be returned because both match 'an'.");
 
     }
 }
