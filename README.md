@@ -1,3 +1,5 @@
+AUFGABE so gut wie möglich umgesetzt. 
+
 ## PRG2 - Exercise 1 Template Repository
 Use this repository as a template for your PRG2 exercise 1 submission. The template serves as a guideline to complete your exercise 1 with JavaFX.
 You can do any changes you want to the code.
