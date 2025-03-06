@@ -1,8 +1,12 @@
 package at.ac.fhcampuswien.fhmdb;
 
+
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.helpers.MovieDisplayHelper;
+
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -11,7 +15,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -52,55 +55,41 @@ public class HomeController implements Initializable {
 
         // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
-        genreComboBox.getItems().clear();
-        genreComboBox.getItems().addAll(FXCollections.observableArrayList(Genre.values()));
+        genreComboBox.getItems().addAll(Genre.values());
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
+            // TODO sort observableMovies ascending
             if (isAscending) {
-                observableMovies.sort(Comparator.comparing(Movie::getTitle));
-                sortBtn.setText("Sort (desc)");
-                // TODO sort observableMovies ascending
+                //in alphabetical order sorted (ascending)
+                List<Movie> sortedMovies = MovieDisplayHelper.sortMoviesAscending(observableMovies);
+                observableMovies.clear();
+                observableMovies.addAll(sortedMovies);
                 sortBtn.setText("Sort (desc)");
             } else {
                 // TODO sort observableMovies descending
-                observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-                sortBtn.setText("Sort (asc)");
+                List<Movie> sortedMovies = MovieDisplayHelper.sortMoviesDescending(observableMovies);
+                observableMovies.clear();
+                observableMovies.addAll(sortedMovies);
+                sortBtn.setText("Sort (desc)");
             }
-            isAscending = !isAscending;
+            isAscending = !isAscending; // Feststellung der sorting order
         });
 
-        searchBtn.setOnAction(actionEvent -> applyFilter());//Suchfunktion
+        searchBtn.setOnAction(actionEvent -> {
+            String query = searchField.getText(); //Benutzereingabe
+            Genre genre = (Genre) genreComboBox.getValue(); //Genre von genreComboBox
 
-        searchField.setOnKeyPressed(event -> { //ENTER - Taste
-            if (event.getCode() == KeyCode.ENTER) {
-                applyFilter();
-            }
+            List<Movie> filteredMovies = MovieDisplayHelper.filterMovies(allMovies, query, genre);
+
+            observableMovies.setAll(filteredMovies);
+
         });
-    }
-
-    private void applyFilter() {
-        String query = searchField.getText().trim().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
-        Genre selectedGenre = (Genre) genreComboBox.getValue();
-
-        //Movies filtered based on search and genre selection
-        List<Movie> filteredMovies = allMovies.stream().
-                filter(movie -> movie.getTitle().toLowerCase().contains(query) || movie.getDescription().toLowerCase().
-                        contains(query)).filter(movie -> selectedGenre == null || (movie.getGenres() != null &&
-                        movie.getGenres().contains(selectedGenre))).toList();
-
-        if (filteredMovies.isEmpty()) {
-            System.out.println("No movies found");
-        } else {
-            observableMovies.setAll(filteredMovies); //Liste ersetzt anstatt neue Elemente hinzugefügt
-            System.out.println("Filtered movies count : " + filteredMovies.size());
-        }
-
-        movieListView.refresh(); //IU-Refresh
     }
 }
+
 
 
