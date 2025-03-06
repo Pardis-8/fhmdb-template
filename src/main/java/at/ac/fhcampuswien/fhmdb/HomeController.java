@@ -18,6 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static com.sun.javafx.scene.control.TableColumnSortTypeWrapper.isAscending;
+
 public class HomeController implements Initializable {
     @FXML
     public JFXButton searchBtn;
@@ -37,10 +39,12 @@ public class HomeController implements Initializable {
     public List<Movie> allMovies = Movie.initializeMovies();
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    private boolean isAscending = true; //Sorting
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableMovies.addAll(allMovies); // add dummy data to observable list
+
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -48,7 +52,7 @@ public class HomeController implements Initializable {
 
         // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
-        genreComboBox.getItems().add(0, 0);
+        genreComboBox.getItems().clear();
         genreComboBox.getItems().addAll(FXCollections.observableArrayList(Genre.values()));
 
         // TODO add event handlers to buttons and call the regarding methods
@@ -56,8 +60,9 @@ public class HomeController implements Initializable {
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if (sortBtn.getText().equals("Sort (asc)")) {
+            if (isAscending) {
                 observableMovies.sort(Comparator.comparing(Movie::getTitle));
+                sortBtn.setText("Sort (desc)");
                 // TODO sort observableMovies ascending
                 sortBtn.setText("Sort (desc)");
             } else {
@@ -65,6 +70,7 @@ public class HomeController implements Initializable {
                 observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
                 sortBtn.setText("Sort (asc)");
             }
+            isAscending = !isAscending;
         });
 
         searchBtn.setOnAction(actionEvent -> applyFilter());//Suchfunktion
@@ -76,16 +82,25 @@ public class HomeController implements Initializable {
         });
     }
 
-        private void applyFilter() {
-            String query = searchField.getText().trim().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
-            Genre selectedGenre = (Genre) genreComboBox.getValue();
+    private void applyFilter() {
+        String query = searchField.getText().trim().toLowerCase(); // Texteingabe des Benutzers im Suchfeld
+        Genre selectedGenre = (Genre) genreComboBox.getValue();
 
-            List<Movie> filteredMovies = (List<Movie>) allMovies.stream().
-                    filter(movie -> movie.getTitle().toLowerCase().contains(query) || movie.getDescription().toLowerCase().
-                            contains(query)).filter(movie -> selectedGenre == null || movie.getGenres().
-                            contains(selectedGenre)).toList();
+        //Movies filtered based on search and genre selection
+        List<Movie> filteredMovies = allMovies.stream().
+                filter(movie -> movie.getTitle().toLowerCase().contains(query) || movie.getDescription().toLowerCase().
+                        contains(query)).filter(movie -> selectedGenre == null || (movie.getGenres() != null &&
+                        movie.getGenres().contains(selectedGenre))).toList();
 
+        if (filteredMovies.isEmpty()) {
+            System.out.println("No movies found");
+        } else {
             observableMovies.setAll(filteredMovies); //Liste ersetzt anstatt neue Elemente hinzugefügt
+            System.out.println("Filtered movies count : " + filteredMovies.size());
         }
+
+        movieListView.refresh(); //IU-Refresh
     }
+}
+
 
